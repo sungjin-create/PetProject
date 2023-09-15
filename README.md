@@ -55,7 +55,8 @@
       - 댓글은 최신순으로만 정렬되며, paging 처리합니다.
       - 댓글은 작성자, 내용, 작성일이 모두에게 보여집니다.
 # ERD
-![image](https://github.com/sungjin-create/PetProject/assets/49832261/ebe2c3f8-ba13-48d5-8dc4-d93f17066e9d)
+![image](https://github.com/sungjin-create/PetProject/assets/49832261/a16a9f9f-0fc7-462f-b387-b7faf1ac340b)
+
 
 
 
