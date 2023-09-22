@@ -1,0 +1,15 @@
+spring:
+  config:
+    import:
+      - mail.yml
+      - jwt.yml
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pet_project
+    username: pet
+    password: 1234
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+
