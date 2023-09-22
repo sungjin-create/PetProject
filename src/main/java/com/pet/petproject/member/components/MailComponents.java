@@ -14,28 +14,28 @@ import javax.mail.internet.MimeMessage;
 @RequiredArgsConstructor
 public class MailComponents {
 
-    private final JavaMailSender javaMailSender;
+  private final JavaMailSender javaMailSender;
 
-    public boolean sendMail(String email, String subject, String text){
+  public boolean sendMail(String email, String subject, String text) {
 
-        boolean result = false;
+    boolean result = false;
 
-        MimeMessagePreparator msg = new MimeMessagePreparator() {
-            @Override
-            public void prepare(MimeMessage mimeMessage) throws Exception {
-                MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-                mimeMessageHelper.setTo(email);
-                mimeMessageHelper.setSubject(subject);
-                mimeMessageHelper.setText(text, true);
-            }
-        };
-        try {
-            javaMailSender.send(msg);
-            return true;
-        } catch (Exception e) {
-            log.error(e.getMessage());
-        }
-        return result;
+    MimeMessagePreparator msg = new MimeMessagePreparator() {
+      @Override
+      public void prepare(MimeMessage mimeMessage) throws Exception {
+        MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+        mimeMessageHelper.setTo(email);
+        mimeMessageHelper.setSubject(subject);
+        mimeMessageHelper.setText(text, true);
+      }
+    };
+    try {
+      javaMailSender.send(msg);
+      return true;
+    } catch (Exception e) {
+      log.error(e.getMessage());
     }
+    return result;
+  }
 
 }
