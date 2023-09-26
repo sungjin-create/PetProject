@@ -1,4 +1,4 @@
-package com.pet.petproject.member.components;
+package com.pet.petproject.login.components;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
