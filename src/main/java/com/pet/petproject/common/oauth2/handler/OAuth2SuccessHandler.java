@@ -30,7 +30,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
         JwtAuthToken token = jwtAuthTokenProvider.createAuthToken(userPrincipal);
 
-        String targetUrl = "http://localhost:8080/oauth/" + token.getToken();
+        String targetUrl = "http://localhost:8080/oauth/token/provide/" + token.getToken();
 
         response.sendRedirect(targetUrl);
     }

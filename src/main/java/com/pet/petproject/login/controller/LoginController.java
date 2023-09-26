@@ -46,7 +46,7 @@ public class LoginController {
     }
 
     //oauth2 토큰 발급 페이지
-    @GetMapping("/oauth/{token}")
+    @GetMapping("/oauth/token/provide/{token}")
     public ResponseEntity<?> oauthTokenProvide(@PathVariable(name = "token") String token) {
         return ResponseEntity.ok().body("Bearer " + token);
     }
