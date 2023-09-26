@@ -1,4 +1,4 @@
-package com.pet.petproject.member.model;
+package com.pet.petproject.login.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginMember {
-    private String email;
-    private String password;
+public class LoginDto {
+
+  private String email;
+  private String password;
 }
