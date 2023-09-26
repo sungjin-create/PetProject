@@ -31,11 +31,10 @@ public class SecurityConfig {
             .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and()
             .authorizeRequests()
-            .antMatchers("/login/**", "/join").permitAll()
-            .antMatchers("/test/**").authenticated()
-
+            .antMatchers("/","/login/**", "/join/**").permitAll()
+            .antMatchers("/pet/**", "/board.**").authenticated()
             .and()
-            .oauth2Login().loginPage("/")
+            .oauth2Login().loginPage("/").permitAll()
             .successHandler(oAuth2SuccessHandler)
             .failureHandler(oAuth2FailureHandler)
             .userInfoEndpoint().userService(oAuth2MemberService);

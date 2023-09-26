@@ -16,9 +16,7 @@ public class MailComponents {
 
   private final JavaMailSender javaMailSender;
 
-  public boolean sendMail(String email, String subject, String text) {
-
-    boolean result = false;
+  public void sendMail(String email, String subject, String text) {
 
     MimeMessagePreparator msg = new MimeMessagePreparator() {
       @Override
@@ -31,11 +29,8 @@ public class MailComponents {
     };
     try {
       javaMailSender.send(msg);
-      return true;
     } catch (Exception e) {
       log.error(e.getMessage());
     }
-    return result;
   }
-
 }

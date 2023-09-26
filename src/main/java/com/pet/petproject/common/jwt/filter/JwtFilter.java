@@ -19,6 +19,7 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 public class JwtFilter extends OncePerRequestFilter {
+
     // 로그인 이후 토큰 자체에 대한 검증
     public static final String AUTHORIZATION_HEADER = "Authorization";
     private final JwtAuthTokenProvider tokenProvider;
