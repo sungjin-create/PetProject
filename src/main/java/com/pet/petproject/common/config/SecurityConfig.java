@@ -32,7 +32,7 @@ public class SecurityConfig {
             .and()
             .authorizeRequests()
             .antMatchers("/","/login/**", "/join/**").permitAll()
-            .antMatchers("/pet/**", "/board.**").authenticated()
+            .antMatchers("/pet/**", "/board.**").permitAll()
             .and()
             .oauth2Login().loginPage("/").permitAll()
             .successHandler(oAuth2SuccessHandler)
