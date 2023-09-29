@@ -40,3 +40,4 @@ out/
 src/main/resources/jwt.yml
 src/main/resources/mail.yml
 src/main/resources/security.yml
+src/main/resources/cloud.yml

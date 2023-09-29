@@ -31,8 +31,6 @@ public class PetService {
   private final PetRepository petRepository;
   private final AwsS3Service awsS3Service;
 
-  private static final String UPLOAD_IMAGE_URL = "pet";
-
   //펫 등록 로직
   public PetInfoDto registerPetInfo(String memberId, RegisterDto parameter) {
     //사용자 정보 확인
@@ -120,7 +118,7 @@ public class PetService {
       awsS3Service.remove(pet.getImageKey());
     }
 
-    AwsS3 awsS3 = awsS3Service.awsImageUpload(multipartFile, UPLOAD_IMAGE_URL);
+    AwsS3 awsS3 = awsS3Service.awsImageUpload(multipartFile);
 
     saveImageKeyAndUrl(pet, awsS3);
 
