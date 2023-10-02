@@ -1,14 +1,10 @@
 package com.pet.petproject.pet.entity;
 
-import co.elastic.clients.util.DateTime;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pet.petproject.member.entity.Member;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -23,15 +19,12 @@ public class Pet {
   private Long petId;
 
   @OneToOne(cascade = CascadeType.REMOVE)
-  @JoinColumn(name = "memberId")
-  private Member memberId;
+  @JoinColumn(name = "member_id")
+  private Member member;
   private String petName;
-
+  private String uuid;
   private Integer birthYear;
-  private String imageKey;
   private String imageUrl;
-  @Enumerated(value = EnumType.STRING)
-  private Status status;
 
   private LocalDateTime registerDate;
   private LocalDateTime updateDate;

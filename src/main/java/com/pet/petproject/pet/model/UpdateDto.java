@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public class UpdateDto {
 
-  private Long beforePetId;
+  private Long petId;
   private String updatePetName;
   private Integer updateBirthYear;
   private String updateImgUrl;

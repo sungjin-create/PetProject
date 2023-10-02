@@ -1,12 +1,8 @@
 package com.pet.petproject.pet.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.pet.petproject.pet.entity.Pet;
-import com.pet.petproject.pet.entity.Status;
-import java.util.Date;
 import lombok.*;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -16,11 +12,9 @@ import java.time.LocalDateTime;
 @Builder
 public class PetInfoDto {
 
-  private Long petId;
+  private String petId;
   private String petName;
-  private String imageKey;
   private String imageUrl;
-  private Status status;
 
   private Integer birthYear;
   private LocalDateTime registerDate;
@@ -31,9 +25,7 @@ public class PetInfoDto {
     return PetInfoDto.builder()
         .petId(pet.getPetId())
         .petName(pet.getPetName())
-        .imageKey(pet.getImageKey())
         .imageUrl(pet.getImageUrl())
-        .status(pet.getStatus())
         .birthYear(pet.getBirthYear())
         .registerDate(pet.getRegisterDate())
         .updateDate(pet.getUpdateDate())

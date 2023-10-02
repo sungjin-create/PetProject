@@ -1,6 +1,5 @@
 package com.pet.petproject.pet.controller;
 
-import com.pet.petproject.common.awsS3.AwsS3Service;
 import com.pet.petproject.pet.model.PetInfoDto;
 import com.pet.petproject.pet.model.RegisterDto;
 import com.pet.petproject.pet.model.UpdateDto;
@@ -27,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class PetController {
 
   private final PetService petService;
-  private final AwsS3Service awsS3Service;
 
   //펫 등록
   @PostMapping("/info/register")
@@ -48,7 +46,7 @@ public class PetController {
   }
 
   //펫 정보 임시 삭제
-  @DeleteMapping("/info/delete")
+  @DeleteMapping("/info")
   public ResponseEntity<?> deletePetInfo(Long petId) {
     return ResponseEntity.ok().body(petService.deletePetInfo(petId));
   }
@@ -57,8 +55,8 @@ public class PetController {
   @PostMapping("/info/aws/image/register")
   public ResponseEntity<?> registerPetImage(@RequestPart("file") MultipartFile multipartFile,
       @RequestParam("petId") Long petId) {
-    return ResponseEntity.ok().body(petService.registerPetImage(petId,
-        multipartFile));
+    petService.registerPetImage(petId, multipartFile);
+    return ResponseEntity.ok().build();
   }
 
   //aws, db에 image 삭제
