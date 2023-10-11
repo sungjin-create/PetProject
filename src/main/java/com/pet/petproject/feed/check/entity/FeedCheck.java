@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.pet.petproject.pet.entity.Pet;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -29,6 +31,11 @@ public class FeedCheck {
   @ManyToOne
   @JoinColumn(name = "feed_id")
   private Feed feed;
+
+  @ManyToOne
+  @JoinColumn(name = "pet_id")
+  private Pet pet;
+
   private Integer feedAmount;
   private LocalDateTime alarmTime;
   private LocalDateTime feedTime;
