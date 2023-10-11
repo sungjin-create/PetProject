@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PetInfoDto {
 
-  private String petId;
+  private Long petId;
   private String petName;
   private String imageUrl;
 
