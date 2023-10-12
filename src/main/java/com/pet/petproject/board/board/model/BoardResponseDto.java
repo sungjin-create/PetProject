@@ -1,10 +1,9 @@
 package com.pet.petproject.board.board.model;
 
 import com.pet.petproject.board.board.entity.Board;
-import com.pet.petproject.board.comment.entity.Comment;
-import com.pet.petproject.board.comment.model.CommentResponseDto;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,26 +20,29 @@ public class BoardResponseDto {
 
     private Long boardId;
     private String title;
-    private List<String> images;
-    private boolean openYn;
     private Long numberOfLikes;
-    private Page<CommentResponseDto> commentPage;
     private LocalDateTime registerDate;
     private LocalDateTime updateDate;
-    private LocalDateTime deleteDate;
 
-    public static BoardResponseDto of(Board board, Page<Comment> commentPage) {
-        return BoardResponseDto.builder()
-                .boardId(board.getId())
-                .title(board.getTitle())
-                .images(board.getImages())
-                .openYn(board.isOpenYn())
-                .numberOfLikes(board.getNumberOfLikes())
-                .commentPage(CommentResponseDto.of(commentPage))
-                .registerDate(board.getRegisterDate())
-                .updateDate(board.getUpdateDate())
-                .deleteDate(board.getDeleteDate())
-                .build();
+    public static Page<BoardResponseDto> of(Page<Board> board) {
+        return board.map(
+            m -> BoardResponseDto.builder()
+                    .boardId(m.getId())
+                    .title(m.getTitle())
+                    .numberOfLikes(m.getNumberOfLikes())
+                    .registerDate(m.getRegisterDate())
+                    .updateDate(m.getUpdateDate())
+                    .build());
+    }
+
+    public static List<BoardResponseDto> listFrom(List<Board> boardList) {
+        return boardList.stream().map(board -> BoardResponseDto.builder()
+                        .boardId(board.getId())
+                        .title(board.getTitle())
+                        .numberOfLikes(board.getNumberOfLikes())
+                        .registerDate(board.getRegisterDate())
+                        .updateDate(board.getUpdateDate()).build())
+                .collect(Collectors.toList());
     }
 
 }

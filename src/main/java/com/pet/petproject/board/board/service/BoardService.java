@@ -3,7 +3,7 @@ package com.pet.petproject.board.board.service;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.pet.petproject.board.board.entity.Board;
-import com.pet.petproject.board.board.model.BoardDto;
+import com.pet.petproject.board.board.model.BoardDetailResponseDto;
 import com.pet.petproject.board.board.model.BoardRegisterDto;
 import com.pet.petproject.board.board.model.BoardResponseDto;
 import com.pet.petproject.board.board.model.BoardUpdateDto;
@@ -15,13 +15,11 @@ import com.pet.petproject.board.elasticsearch.repository.BoardSearchRepository;
 import com.pet.petproject.common.exception.AppException;
 import com.pet.petproject.member.entity.Member;
 import com.pet.petproject.member.repository.MemberRepository;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -145,14 +143,14 @@ public class BoardService {
     board.setImages(images);
   }
 
-  public Page<BoardDto> getByLatestOrder(Pageable pageable) {
+  public Page<BoardResponseDto> getByLatestOrder(Pageable pageable) {
     Page<Board> boardPage = boardRepository.getAllByOpenYnIsTrue(pageable);
-    return BoardDto.of(boardPage);
+    return BoardResponseDto.of(boardPage);
   }
 
-  public Page<BoardDto> getByLikesOrder(Pageable pageable) {
+  public Page<BoardResponseDto> getByLikesOrder(Pageable pageable) {
     Page<Board> boardPage = boardRepository.getAllByOpenYnIsTrue(pageable);
-    return BoardDto.of(boardPage);
+    return BoardResponseDto.of(boardPage);
   }
 
   public Page<BoardDocument> searchByTitle(String title, Pageable pageable) {
@@ -167,10 +165,10 @@ public class BoardService {
     return boardSearchRepository.findByTitleOrContents(parameter, parameter, pageable);
   }
 
-  public BoardResponseDto getBoardDetail(Long boardId, Pageable pageable) {
+  public BoardDetailResponseDto getBoardDetail(Long boardId, Pageable pageable) {
     Board board = boardRepository.findById(boardId).orElseThrow(
         () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
     Page<Comment> commentPage = commentRepository.findByBoard(board, pageable);
-    return BoardResponseDto.of(board, commentPage);
+    return BoardDetailResponseDto.of(board, commentPage);
   }
 }
