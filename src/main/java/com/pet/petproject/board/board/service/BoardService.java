@@ -15,11 +15,13 @@ import com.pet.petproject.board.elasticsearch.repository.BoardSearchRepository;
 import com.pet.petproject.common.exception.AppException;
 import com.pet.petproject.member.entity.Member;
 import com.pet.petproject.member.repository.MemberRepository;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -35,130 +37,140 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class BoardService {
 
-    private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
-    private final AmazonS3Client amazonS3Client;
-    private final BoardSearchRepository boardSearchRepository;
-    private final CommentRepository commentRepository;
+  private final MemberRepository memberRepository;
+  private final BoardRepository boardRepository;
+  private final AmazonS3Client amazonS3Client;
+  private final BoardSearchRepository boardSearchRepository;
+  private final CommentRepository commentRepository;
 
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucket;
+  @Value("${cloud.aws.s3.bucket}")
+  private String bucket;
 
-    @Transactional
-    public void registerBoard(String memberId, List<MultipartFile> imageList, BoardRegisterDto parameter) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Member"));
+  @Transactional
+  public void registerBoard(String memberId, List<MultipartFile> imageList,
+      BoardRegisterDto parameter) {
+    Member member = getMember(memberId);
 
-        String uuid = UUID.randomUUID().toString();
+    String uuid = UUID.randomUUID().toString();
 
-        //게시판 db에 저장
-        Board board = boardRepository.save(Board.of(member, parameter, uuid));
+    //게시판 db에 저장
+    Board board = boardRepository.save(Board.of(member, parameter, uuid));
 
-        //게시판 es에 저장
-        boardSearchRepository.save(BoardDocument.from(board));
+    //게시판 es에 저장
+    boardSearchRepository.save(BoardDocument.from(board));
 
-        //이미지 s3에 저장
-        List<String> list = registerBoardImageToS3(board, imageList);
+    //이미지 s3에 저장
+    List<String> list = registerBoardImageToS3(board, imageList);
 
-        //이미지 db에 저장
-        board.setImages(list);
+    //이미지 db에 저장
+    board.setImages(list);
 
-    }
+  }
 
-    public List<String> registerBoardImageToS3(Board board, List<MultipartFile> fileList) {
+  private Member getMember(String memberId) {
+    return memberRepository.findById(memberId)
+        .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Member"));
+  }
 
-        int count = 1;
-        List<String> imageUrlList = new ArrayList<>();
+  public List<String> registerBoardImageToS3(Board board, List<MultipartFile> fileList) {
 
-        for (MultipartFile file : fileList) {
-            ObjectMetadata metadata = new ObjectMetadata();
-            metadata.setContentType(file.getContentType());
-            metadata.setContentLength(file.getSize());
+    int count = 1;
+    List<String> imageUrlList = new ArrayList<>();
 
-            String fileName = file.getOriginalFilename();
-            String extension = getExtension(fileName);
+    for (MultipartFile file : fileList) {
+      ObjectMetadata metadata = new ObjectMetadata();
+      metadata.setContentType(file.getContentType());
+      metadata.setContentLength(file.getSize());
 
-            String fileUrl = board.getUuid() + "images" + count++ + "." + extension;
-            String key = "board/" + fileUrl;
+      String fileName = file.getOriginalFilename();
+      String extension = getExtension(fileName);
 
-            try {
-                if (amazonS3Client.doesObjectExist(bucket, key)) {
-                    amazonS3Client.deleteObject(bucket, key);
-                }
-                amazonS3Client.putObject(bucket, key, file.getInputStream(), metadata);
-                imageUrlList.add(key);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+      String fileUrl = board.getUuid() + "images" + count++ + "." + extension;
+      String key = "board/" + fileUrl;
+
+      try {
+        if (amazonS3Client.doesObjectExist(bucket, key)) {
+          amazonS3Client.deleteObject(bucket, key);
         }
-        return imageUrlList;
+        amazonS3Client.putObject(bucket, key, file.getInputStream(), metadata);
+        imageUrlList.add(key);
+      } catch (IOException e) {
+        throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "S3 imageRegister Error");
+      }
+    }
+    return imageUrlList;
+  }
+
+  private static String getExtension(String fileName) {
+    int extensionIndex = fileName.lastIndexOf(".");
+    return fileName.substring(extensionIndex + 1);
+  }
+
+  @Transactional
+  public void deleteBoard(Long boardId) {
+    Board board = boardRepository.findById(boardId).orElseThrow(
+        () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+
+    List<String> imageList = board.getImages();
+    deleteImageFromS3(imageList);
+    boardRepository.deleteById(boardId);
+    boardSearchRepository.deleteById(boardId);
+  }
+
+  private void deleteImageFromS3(List<String> imageList) {
+    for (String key : imageList) {
+      if (amazonS3Client.doesObjectExist(bucket, key)) {
+        amazonS3Client.deleteObject(bucket, key);
+      }
+    }
+  }
+
+  @Transactional
+  public void updateBoard(String memberId, List<MultipartFile> imageList, BoardUpdateDto parameter) {
+
+    Board board = boardRepository.findById(parameter.getBoardId())
+        .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+
+    if (!board.getMember().getId().equals(memberId)) {
+      throw new AppException(HttpStatus.BAD_REQUEST, "작성자가 아닙니다");
     }
 
-    private static String getExtension(String fileName) {
-        int extensionIndex = fileName.lastIndexOf(".");
-        return fileName.substring(extensionIndex + 1);
-    }
+    board.setTitle(parameter.getTitle());
+    board.setContents(parameter.getContents());
+    board.setOpenYn(parameter.isOpenYn());
+    board.setUpdateDate(LocalDateTime.now());
 
-    @Transactional
-    public void deleteBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+    deleteImageFromS3(board.getImages());
+    List<String> images = registerBoardImageToS3(board, imageList);
+    board.setImages(images);
+  }
 
-        List<String> imageList = board.getImages();
-        deleteImageFromS3(imageList);
-        boardRepository.deleteById(boardId);
-        boardSearchRepository.deleteById(boardId);
-    }
+  public Page<BoardDto> getByLatestOrder(Pageable pageable) {
+    Page<Board> boardPage = boardRepository.getAllByOpenYnIsTrue(pageable);
+    return BoardDto.of(boardPage);
+  }
 
-    private void deleteImageFromS3(List<String> imageList) {
-        for (String key : imageList) {
-            if (amazonS3Client.doesObjectExist(bucket, key)) {
-                amazonS3Client.deleteObject(bucket, key);
-            }
-        }
-    }
+  public Page<BoardDto> getByLikesOrder(Pageable pageable) {
+    Page<Board> boardPage = boardRepository.getAllByOpenYnIsTrue(pageable);
+    return BoardDto.of(boardPage);
+  }
 
-    @Transactional
-    public void updateBoard(List<MultipartFile> imageList, BoardUpdateDto parameter) {
-        Board board = boardRepository.findById(parameter.getBoardId())
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+  public Page<BoardDocument> searchByTitle(String title, Pageable pageable) {
+    return boardSearchRepository.findByTitle(title, pageable);
+  }
 
-        board.setTitle(parameter.getTitle());
-        board.setContents(parameter.getContents());
-        board.setOpenYn(parameter.isOpenYn());
-        board.setUpdateDate(LocalDateTime.now());
+  public Page<BoardDocument> searchByContents(String contents, Pageable pageable) {
+    return boardSearchRepository.findByContents(contents, pageable);
+  }
 
-        deleteImageFromS3(board.getImages());
-        List<String> images = registerBoardImageToS3(board, imageList);
-        board.setImages(images);
-    }
+  public Page<BoardDocument> searchByContentsAndTitle(String parameter, Pageable pageable) {
+    return boardSearchRepository.findByTitleOrContents(parameter, parameter, pageable);
+  }
 
-    public Page<BoardDto> getByLatestOrder(Pageable pageable) {
-        Page<Board> boardPage = boardRepository.getAllByOpenYnIsTrue(pageable);
-        return BoardDto.of(boardPage);
-    }
-
-    public Page<BoardDto> getByLikesOrder(Pageable pageable) {
-        Page<Board> boardPage = boardRepository.getAllByOpenYnIsTrue(pageable);
-        return BoardDto.of(boardPage);
-    }
-
-    public Page<BoardDocument> searchByTitle(String title, Pageable pageable) {
-        return boardSearchRepository.findByTitle(title, pageable);
-    }
-
-    public Page<BoardDocument> searchByContents(String contents, Pageable pageable) {
-        return boardSearchRepository.findByContents(contents, pageable);
-    }
-
-    public Page<BoardDocument> searchByContentsAndTitle(String parameter, Pageable pageable) {
-        return boardSearchRepository.findByTitleOrContents(parameter, parameter, pageable);
-    }
-
-    public BoardResponseDto getBoardDetail(Long boardId, Pageable pageable) {
-        Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
-        Page<Comment> commentPage = commentRepository.findByBoard(board, pageable);
-        return BoardResponseDto.of(board, commentPage);
-    }
+  public BoardResponseDto getBoardDetail(Long boardId, Pageable pageable) {
+    Board board = boardRepository.findById(boardId).orElseThrow(
+        () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+    Page<Comment> commentPage = commentRepository.findByBoard(board, pageable);
+    return BoardResponseDto.of(board, commentPage);
+  }
 }
