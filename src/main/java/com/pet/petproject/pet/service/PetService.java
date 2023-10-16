@@ -54,7 +54,7 @@ public class PetService {
 
   //중복체크 - 멤버 아이디와, 펫 이름으로 중복여부 확인
   private void duplicateCheck(Member member, String petName) {
-    if (petRepository.existsByMemberIdAndPetName(member, petName)) {
+    if (petRepository.existsByMemberAndPetName(member, petName)) {
       throw new AppException(HttpStatus.BAD_REQUEST, "중복된 이름의 펫이 있습니다.");
     }
   }
@@ -86,7 +86,7 @@ public class PetService {
 
   //pet 가져오기
   private Pet getPet(Long petId) {
-    return petRepository.findByPetId(petId)
+    return petRepository.findById(petId)
         .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not found Pet"));
   }
 

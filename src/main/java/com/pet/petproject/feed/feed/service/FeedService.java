@@ -24,7 +24,7 @@ public class FeedService {
 
   public void registerFeedCycle(FeedDto feedDto) {
     //petId로 pet정보 가져오기
-    Pet pet = petRepository.findByPetId(feedDto.getPetId()).orElseThrow(
+    Pet pet = petRepository.findById(feedDto.getPetId()).orElseThrow(
         () -> new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "Not found Pet"));
 
     //feedDto를 Feed객체로 변환

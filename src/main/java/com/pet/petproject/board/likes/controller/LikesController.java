@@ -1,5 +1,6 @@
 package com.pet.petproject.board.likes.controller;
 
+import com.pet.petproject.board.likes.redisson.RedissonLockLikesFacade;
 import com.pet.petproject.board.likes.service.LikesService;
 import com.pet.petproject.common.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +19,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikesController {
 
     private final LikesService likesService;
+    private final RedissonLockLikesFacade redissonLockStockFacade;
 
     @GetMapping("/check")
     public ResponseEntity<?> checkLikes(@RequestParam("boardId") Long boardId) {
         String memberId = SpringSecurityUtil.getLoginId();
 
-        likesService.checkLikes(boardId, memberId);
-
+        redissonLockStockFacade.decrease(boardId, memberId);
         return ResponseEntity.ok().build();
     }
 
