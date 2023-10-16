@@ -26,19 +26,19 @@ public class SecurityConfig {
   @Bean
   protected SecurityFilterChain webSecurityFilterChain(HttpSecurity http) throws Exception {
     http
-            .httpBasic().disable()
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeRequests()
-            .antMatchers("/","/login/**", "/join/**").permitAll()
-            .antMatchers("/pet/**", "/board.**").permitAll()
-            .and()
-            .oauth2Login().loginPage("/").permitAll()
-            .successHandler(oAuth2SuccessHandler)
-            .failureHandler(oAuth2FailureHandler)
-            .userInfoEndpoint().userService(oAuth2MemberService);
-        http.addFilterBefore(new JwtFilter(jwtAuthTokenProvider), UsernamePasswordAuthenticationFilter.class);
+        .httpBasic().disable()
+        .csrf().disable()
+        .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        .and()
+        .authorizeRequests()
+        .antMatchers("/login/**", "/join/**").permitAll()
+        .and()
+        .oauth2Login().loginPage("/").permitAll()
+        .successHandler(oAuth2SuccessHandler)
+        .failureHandler(oAuth2FailureHandler)
+        .userInfoEndpoint().userService(oAuth2MemberService);
+    http.addFilterBefore(new JwtFilter(jwtAuthTokenProvider),
+        UsernamePasswordAuthenticationFilter.class);
 
     return http.build();
   }

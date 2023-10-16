@@ -1,4 +1,4 @@
-package com.pet.petproject.common.sse.entity;
+package com.pet.petproject.sse.entity;
 
 public enum NotificationType {
   FEED, HOSPITAL, TODO

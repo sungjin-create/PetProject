@@ -1,17 +1,11 @@
 package com.pet.petproject.login.controller;
 
-import com.pet.petproject.common.exception.AppException;
-import com.pet.petproject.login.service.LoginService;
 import com.pet.petproject.login.model.JoinDto;
 import com.pet.petproject.login.model.LoginDto;
+import com.pet.petproject.login.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;

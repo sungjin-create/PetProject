@@ -18,31 +18,31 @@ import org.springframework.data.domain.Page;
 @Builder
 public class BoardResponseDto {
 
-    private Long boardId;
-    private String title;
-    private Long numberOfLikes;
-    private LocalDateTime registerDate;
-    private LocalDateTime updateDate;
+  private Long boardId;
+  private String title;
+  private Long numberOfLikes;
+  private LocalDateTime registerDate;
+  private LocalDateTime updateDate;
 
-    public static Page<BoardResponseDto> of(Page<Board> board) {
-        return board.map(
-            m -> BoardResponseDto.builder()
-                    .boardId(m.getId())
-                    .title(m.getTitle())
-                    .numberOfLikes(m.getNumberOfLikes())
-                    .registerDate(m.getRegisterDate())
-                    .updateDate(m.getUpdateDate())
-                    .build());
-    }
+  public static Page<BoardResponseDto> of(Page<Board> board) {
+    return board.map(
+        m -> BoardResponseDto.builder()
+            .boardId(m.getId())
+            .title(m.getTitle())
+            .numberOfLikes(m.getNumberOfLikes())
+            .registerDate(m.getRegisterDate())
+            .updateDate(m.getUpdateDate())
+            .build());
+  }
 
-    public static List<BoardResponseDto> listFrom(List<Board> boardList) {
-        return boardList.stream().map(board -> BoardResponseDto.builder()
-                        .boardId(board.getId())
-                        .title(board.getTitle())
-                        .numberOfLikes(board.getNumberOfLikes())
-                        .registerDate(board.getRegisterDate())
-                        .updateDate(board.getUpdateDate()).build())
-                .collect(Collectors.toList());
-    }
+  public static List<BoardResponseDto> listFrom(List<Board> boardList) {
+    return boardList.stream().map(board -> BoardResponseDto.builder()
+            .boardId(board.getId())
+            .title(board.getTitle())
+            .numberOfLikes(board.getNumberOfLikes())
+            .registerDate(board.getRegisterDate())
+            .updateDate(board.getUpdateDate()).build())
+        .collect(Collectors.toList());
+  }
 
 }

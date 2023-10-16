@@ -18,21 +18,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/board/likes")
 public class LikesController {
 
-    private final LikesService likesService;
-    private final RedissonLockLikesFacade redissonLockStockFacade;
+  private final LikesService likesService;
+  private final RedissonLockLikesFacade redissonLockStockFacade;
 
-    @GetMapping("/check")
-    public ResponseEntity<?> checkLikes(@RequestParam("boardId") Long boardId) {
-        String memberId = SpringSecurityUtil.getLoginId();
+  @GetMapping("/check")
+  public ResponseEntity<?> checkLikes(@RequestParam("boardId") Long boardId) {
+    String memberId = SpringSecurityUtil.getLoginId();
 
-        redissonLockStockFacade.decrease(boardId, memberId);
-        return ResponseEntity.ok().build();
-    }
+    redissonLockStockFacade.decrease(boardId, memberId);
+    return ResponseEntity.ok().build();
+  }
 
-    @PutMapping("/uncheck")
-    public ResponseEntity<?> uncheckLikes(@RequestParam("boardId") Long boardId) {
-        String memberId = SpringSecurityUtil.getLoginId();
-        likesService.uncheckLikes(boardId, memberId);
-        return ResponseEntity.ok().build();
-    }
+  @PutMapping("/uncheck")
+  public ResponseEntity<?> uncheckLikes(@RequestParam("boardId") Long boardId) {
+    String memberId = SpringSecurityUtil.getLoginId();
+    likesService.uncheckLikes(boardId, memberId);
+    return ResponseEntity.ok().build();
+  }
 }

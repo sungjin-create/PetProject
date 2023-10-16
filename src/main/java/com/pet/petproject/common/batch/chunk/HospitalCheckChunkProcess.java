@@ -1,7 +1,7 @@
 package com.pet.petproject.common.batch.chunk;
 
-import com.pet.petproject.common.sse.entity.NotificationType;
-import com.pet.petproject.common.sse.service.NotificationService;
+import com.pet.petproject.sse.entity.NotificationType;
+import com.pet.petproject.sse.service.NotificationService;
 import com.pet.petproject.hospital.check.entity.HospitalCheck;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

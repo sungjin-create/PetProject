@@ -1,6 +1,6 @@
-package com.pet.petproject.common.sse.controller;
+package com.pet.petproject.sse.controller;
 
-import com.pet.petproject.common.sse.service.NotificationService;
+import com.pet.petproject.sse.service.NotificationService;
 import com.pet.petproject.common.util.SpringSecurityUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

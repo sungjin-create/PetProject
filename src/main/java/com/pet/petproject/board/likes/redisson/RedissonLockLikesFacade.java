@@ -12,22 +12,23 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class RedissonLockLikesFacade {
-    private final RedissonClient redissonClient;
-    private final LikesService likesService;
 
-    public void decrease(Long boardId, String memberId) {
-        RLock lock = redissonClient.getLock(String.valueOf(boardId));
-        try {
-            boolean available = lock.tryLock(20, 1, TimeUnit.SECONDS);
-            if (!available) {
-                throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "Lock get Fail");
-            }
-            likesService.checkLikes(boardId, memberId);
+  private final RedissonClient redissonClient;
+  private final LikesService likesService;
 
-        } catch (InterruptedException e) {
-            throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
-        } finally {
-            lock.unlock();
-        }
+  public void decrease(Long boardId, String memberId) {
+    RLock lock = redissonClient.getLock(String.valueOf(boardId));
+    try {
+      boolean available = lock.tryLock(20, 1, TimeUnit.SECONDS);
+      if (!available) {
+        throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, "Lock get Fail");
+      }
+      likesService.checkLikes(boardId, memberId);
+
+    } catch (InterruptedException e) {
+      throw new AppException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    } finally {
+      lock.unlock();
     }
+  }
 }

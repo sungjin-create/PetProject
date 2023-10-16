@@ -1,24 +1,23 @@
 package com.pet.petproject.follow.service;
 
 import com.pet.petproject.board.board.entity.Board;
-import com.pet.petproject.board.board.model.BoardResponseDto;
 import com.pet.petproject.board.board.repository.BoardRepository;
 import com.pet.petproject.common.exception.AppException;
-import com.pet.petproject.common.util.PageUtil;
 import com.pet.petproject.follow.entity.Follow;
 import com.pet.petproject.follow.model.FollowResponseDto;
 import com.pet.petproject.follow.repository.FollowRepository;
 import com.pet.petproject.member.entity.Member;
 import com.pet.petproject.member.repository.MemberRepository;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -46,18 +45,17 @@ public class FollowService {
         .build());
   }
 
-  public Page<?> getFollowBoard(String memberId, Pageable pageable) {
+  public Page<Board> getFollowBoard(String memberId, Pageable pageable) {
 
     Member member = getMember(memberId);
 
     List<Follow> followList = followRepository.findAllByFollower(member);
-    List<Board> boardList = new ArrayList<>();
+    List<Member> memberList = new ArrayList<>();
     for (Follow follow : followList) {
-      Member followed = follow.getFollowed();
-      boardList.addAll(boardRepository.getAllByMemberAndOpenYnIsTrue(followed));
+      memberList.add(follow.getFollowed());
     }
 
-    return PageUtil.listToPage(BoardResponseDto.listFrom(boardList), pageable);
+    return boardRepository.getAllByMemberInAndOpenYnIsTrue(memberList, pageable);
   }
 
   private Member getMember(String memberId) {

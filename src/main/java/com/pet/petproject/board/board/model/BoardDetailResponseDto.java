@@ -19,25 +19,25 @@ import org.springframework.data.domain.Page;
 @Builder
 public class BoardDetailResponseDto {
 
-    private Long boardId;
-    private String title;
-    private List<String> images;
-    private boolean openYn;
-    private Long numberOfLikes;
-    private Page<CommentResponseDto> commentPage;
-    private LocalDateTime registerDate;
-    private LocalDateTime updateDate;
+  private Long boardId;
+  private String title;
+  private List<String> images;
+  private boolean openYn;
+  private Long numberOfLikes;
+  private Page<CommentResponseDto> commentPage;
+  private LocalDateTime registerDate;
+  private LocalDateTime updateDate;
 
-    public static BoardDetailResponseDto of(Board board, Page<Comment> commentPage) {
-        return BoardDetailResponseDto.builder()
-                .boardId(board.getId())
-                .title(board.getTitle())
-                .images(board.getImages())
-                .openYn(board.isOpenYn())
-                .numberOfLikes(board.getNumberOfLikes())
-                .commentPage(CommentResponseDto.of(commentPage))
-                .registerDate(board.getRegisterDate())
-                .updateDate(board.getUpdateDate())
-                .build();
-    }
+  public static BoardDetailResponseDto of(Board board, Page<Comment> commentPage) {
+    return BoardDetailResponseDto.builder()
+        .boardId(board.getId())
+        .title(board.getTitle())
+        .images(board.getImages())
+        .openYn(board.isOpenYn())
+        .numberOfLikes(board.getNumberOfLikes())
+        .commentPage(CommentResponseDto.of(commentPage))
+        .registerDate(board.getRegisterDate())
+        .updateDate(board.getUpdateDate())
+        .build();
+  }
 }

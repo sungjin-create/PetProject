@@ -27,31 +27,31 @@ import lombok.Setter;
 @Builder
 public class Comment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "comment_id")
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+  @ManyToOne
+  @JoinColumn(name = "member_id")
+  private Member member;
 
-    @ManyToOne
-    @JoinColumn(name = "board_id")
-    private Board board;
+  @ManyToOne
+  @JoinColumn(name = "board_id")
+  private Board board;
 
-    private String contents;
+  private String contents;
 
-    private LocalDateTime registerDate;
+  private LocalDateTime registerDate;
 
-    public static Comment of(Member member, Board board, String contents) {
+  public static Comment of(Member member, Board board, String contents) {
 
-        return Comment.builder()
-                .member(member)
-                .board(board)
-                .contents(contents)
-                .registerDate(LocalDateTime.now())
-                .build();
+    return Comment.builder()
+        .member(member)
+        .board(board)
+        .contents(contents)
+        .registerDate(LocalDateTime.now())
+        .build();
 
-    }
+  }
 }

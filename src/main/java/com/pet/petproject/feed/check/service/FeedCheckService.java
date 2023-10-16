@@ -1,7 +1,7 @@
 package com.pet.petproject.feed.check.service;
 
-import com.pet.petproject.common.sse.entity.NotificationType;
-import com.pet.petproject.common.sse.service.NotificationService;
+import com.pet.petproject.sse.entity.NotificationType;
+import com.pet.petproject.sse.service.NotificationService;
 import com.pet.petproject.feed.check.entity.FeedCheck;
 import com.pet.petproject.feed.check.repository.FeedCheckRepository;
 import com.pet.petproject.feed.feed.entity.Feed;
@@ -50,6 +50,7 @@ public class FeedCheckService {
       //feedCheckList에 저장
       feedCheckList.add(FeedCheck.builder()
               .feed(feed)
+              .pet(feed.getPet())
               .feedAmount(feed.getFeedAmount())
               .feedTime(feedTime)
               .alarmTime(alarmTime)

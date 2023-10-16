@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/board/comment")
 public class CommentController {
 
-    private final CommentService commentService;
+  private final CommentService commentService;
 
-    @PostMapping("/register")
-    public ResponseEntity<?> registerComment(@RequestBody CommentRegisterDto parameter) {
-        String memberId = SpringSecurityUtil.getLoginId();
-        commentService.registerComment(memberId, parameter);
-        return ResponseEntity.ok().build();
-    }
+  @PostMapping("/register")
+  public ResponseEntity<?> registerComment(@RequestBody CommentRegisterDto parameter) {
+    String memberId = SpringSecurityUtil.getLoginId();
+    commentService.registerComment(memberId, parameter);
+    return ResponseEntity.ok().build();
+  }
 }

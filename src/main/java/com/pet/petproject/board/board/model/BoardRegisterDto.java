@@ -13,8 +13,8 @@ import lombok.Setter;
 @Builder
 public class BoardRegisterDto {
 
-    private String title;
-    private String contents;
-    private boolean openYn;
+  private String title;
+  private String contents;
+  private boolean openYn;
 
 }

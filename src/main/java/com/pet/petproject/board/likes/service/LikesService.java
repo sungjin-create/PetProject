@@ -17,50 +17,50 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class LikesService {
 
-    private final LikesRepository likesRepository;
-    private final BoardRepository boardRepository;
-    private final MemberRepository memberRepository;
+  private final LikesRepository likesRepository;
+  private final BoardRepository boardRepository;
+  private final MemberRepository memberRepository;
 
-    @Transactional
-    public void checkLikes(Long boardId, String memberId) {
+  @Transactional
+  public void checkLikes(Long boardId, String memberId) {
 
-        Member member = findMember(memberId);
+    Member member = findMember(memberId);
 
-        Board board = findBoard(boardId);
+    Board board = findBoard(boardId);
 
-        if (likesRepository.existsByMemberAndBoard(member, board)) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Already Check Likes");
-        }
-
-        board.setNumberOfLikes(board.getNumberOfLikes()+1);
-
-        likesRepository.save(Likes.builder()
-                .member(member)
-                .board(board)
-                .registerDate(LocalDateTime.now())
-                .build());
+    if (likesRepository.existsByMemberAndBoard(member, board)) {
+      throw new AppException(HttpStatus.BAD_REQUEST, "Already Check Likes");
     }
 
-    private Member findMember(String memberId) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Member"));
-        return member;
-    }
+    board.setNumberOfLikes(board.getNumberOfLikes() + 1);
 
-    private Board findBoard(Long boardId) {
-        Board board = boardRepository.findById(boardId)
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
-        return board;
-    }
+    likesRepository.save(Likes.builder()
+        .member(member)
+        .board(board)
+        .registerDate(LocalDateTime.now())
+        .build());
+  }
 
-    @Transactional
-    public void uncheckLikes(Long boardId, String memberId) {
-        Member member = findMember(memberId);
-        Board board = findBoard(boardId);
-        if (!likesRepository.existsByMemberAndBoard(member, board)) {
-            throw new AppException(HttpStatus.BAD_REQUEST, "Not Check Likes");
-        }
-        board.setNumberOfLikes(board.getNumberOfLikes() - 1);
-        likesRepository.deleteLikesByMemberAndBoard(member, board);
+  private Member findMember(String memberId) {
+    Member member = memberRepository.findById(memberId)
+        .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Member"));
+    return member;
+  }
+
+  private Board findBoard(Long boardId) {
+    Board board = boardRepository.findById(boardId)
+        .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+    return board;
+  }
+
+  @Transactional
+  public void uncheckLikes(Long boardId, String memberId) {
+    Member member = findMember(memberId);
+    Board board = findBoard(boardId);
+    if (!likesRepository.existsByMemberAndBoard(member, board)) {
+      throw new AppException(HttpStatus.BAD_REQUEST, "Not Check Likes");
     }
+    board.setNumberOfLikes(board.getNumberOfLikes() - 1);
+    likesRepository.deleteLikesByMemberAndBoard(member, board);
+  }
 }

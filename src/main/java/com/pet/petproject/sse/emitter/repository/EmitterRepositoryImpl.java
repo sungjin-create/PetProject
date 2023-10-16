@@ -1,4 +1,4 @@
-package com.pet.petproject.common.sse.emitter.repository;
+package com.pet.petproject.sse.emitter.repository;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

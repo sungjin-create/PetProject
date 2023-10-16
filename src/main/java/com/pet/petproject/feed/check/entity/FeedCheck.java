@@ -2,12 +2,7 @@ package com.pet.petproject.feed.check.entity;
 
 import com.pet.petproject.feed.feed.entity.Feed;
 import java.time.LocalDateTime;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 import com.pet.petproject.pet.entity.Pet;
 import lombok.AllArgsConstructor;
@@ -26,6 +21,7 @@ public class FeedCheck {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "feed_check_id")
   private Long id;
 
   @ManyToOne

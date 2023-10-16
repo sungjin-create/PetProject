@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class BoardUpdateDto{
+public class BoardUpdateDto {
 
-    private Long boardId;
-    private String title;
-    private String contents;
-    private boolean openYn;
+  private Long boardId;
+  private String title;
+  private String contents;
+  private boolean openYn;
 
 }

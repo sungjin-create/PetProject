@@ -18,26 +18,26 @@ import org.springframework.data.elasticsearch.annotations.FieldType;
 @Document(indexName = "board")
 public class BoardDocument {
 
-    @Id
-    @Field(type = FieldType.Keyword)
-    private Long id;
+  @Id
+  @Field(type = FieldType.Keyword)
+  private Long id;
 
-    @Field(type = FieldType.Text)
-    private String title;
+  @Field(type = FieldType.Text)
+  private String title;
 
-    @Field(type = FieldType.Text)
-    private String contents;
+  @Field(type = FieldType.Text)
+  private String contents;
 
-    @Field(type = FieldType.Long)
-    private Long numberOfLikes;
+  @Field(type = FieldType.Long)
+  private Long numberOfLikes;
 
-    public static BoardDocument from(Board board) {
-        return BoardDocument.builder()
-                .id(board.getId())
-                .title(board.getTitle())
-                .contents(board.getContents())
-                .numberOfLikes(board.getNumberOfLikes())
-                .build();
-    }
+  public static BoardDocument from(Board board) {
+    return BoardDocument.builder()
+        .id(board.getId())
+        .title(board.getTitle())
+        .contents(board.getContents())
+        .numberOfLikes(board.getNumberOfLikes())
+        .build();
+  }
 
 }

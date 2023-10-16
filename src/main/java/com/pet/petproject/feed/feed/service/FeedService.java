@@ -42,6 +42,6 @@ public class FeedService {
     Feed feed = feedRepository.findById(feedId).orElseThrow(
         () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found FeedId"));
     feedCheckRepository.deleteAllByFeed(feed);
-    feedRepository.deleteByFeedId(feedId);
+    feedRepository.deleteById(feedId);
   }
 }

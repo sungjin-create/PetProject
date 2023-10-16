@@ -27,38 +27,38 @@ import lombok.Setter;
 @Builder
 public class Board {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "board_id")
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "board_id")
+  private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+  @ManyToOne
+  @JoinColumn(name = "member_id")
+  private Member member;
 
-    private String title;
-    private String contents;
-    private String uuid;
+  private String title;
+  private String contents;
+  private String uuid;
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-    private List<String> images;
-    private boolean openYn;
-    private Long numberOfLikes;
+  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+  private List<String> images;
+  private boolean openYn;
+  private Long numberOfLikes;
 
-    private LocalDateTime registerDate;
-    private LocalDateTime updateDate;
-    private LocalDateTime deleteDate;
+  private LocalDateTime registerDate;
+  private LocalDateTime updateDate;
+  private LocalDateTime deleteDate;
 
-    public static Board of(Member member, BoardRegisterDto parameter, String uuid) {
+  public static Board of(Member member, BoardRegisterDto parameter, String uuid) {
 
-        return Board.builder()
-                .member(member)
-                .title(parameter.getTitle())
-                .contents(parameter.getContents())
-                .uuid(uuid)
-                .openYn(parameter.isOpenYn())
-                .numberOfLikes(0L)
-                .registerDate(LocalDateTime.now())
-                .build();
-    }
+    return Board.builder()
+        .member(member)
+        .title(parameter.getTitle())
+        .contents(parameter.getContents())
+        .uuid(uuid)
+        .openYn(parameter.isOpenYn())
+        .numberOfLikes(0L)
+        .registerDate(LocalDateTime.now())
+        .build();
+  }
 }

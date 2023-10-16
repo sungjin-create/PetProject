@@ -62,13 +62,11 @@ public class PetService {
   //펫 등록하기
   private Pet registerPet(Member member, RegisterDto parameter) {
 
-    Integer.getInteger(parameter.getBirthYear());
-
     return petRepository.save(Pet.builder()
         .member(member)
         .uuid(UUID.randomUUID().toString())
         .petName(parameter.getPetName())
-        .birthYear(Integer.parseInt(parameter.getBirthYear()))
+        .birthYear(parameter.getBirthYear())
         .registerDate(LocalDateTime.now())
         .build()
     );

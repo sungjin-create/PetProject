@@ -1,13 +1,14 @@
-package com.pet.petproject.common.sse.service;
+package com.pet.petproject.sse.service;
 
-import com.pet.petproject.common.sse.emitter.repository.EmitterRepository;
-import com.pet.petproject.common.sse.entity.Notification;
-import com.pet.petproject.common.sse.entity.NotificationType;
-import com.pet.petproject.common.sse.model.NotificationResponseDto;
-import com.pet.petproject.common.sse.repository.NotificationRepository;
+import com.pet.petproject.sse.emitter.repository.EmitterRepository;
+import com.pet.petproject.sse.entity.Notification;
+import com.pet.petproject.sse.entity.NotificationType;
+import com.pet.petproject.sse.model.NotificationResponseDto;
+import com.pet.petproject.sse.repository.NotificationRepository;
 import com.pet.petproject.member.entity.Member;
 import java.io.IOException;
 import java.util.Map;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;

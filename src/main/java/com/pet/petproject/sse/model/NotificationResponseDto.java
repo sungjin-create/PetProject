@@ -1,7 +1,7 @@
-package com.pet.petproject.common.sse.model;
+package com.pet.petproject.sse.model;
 
-import com.pet.petproject.common.sse.entity.Notification;
-import com.pet.petproject.common.sse.entity.NotificationType;
+import com.pet.petproject.sse.entity.Notification;
+import com.pet.petproject.sse.entity.NotificationType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

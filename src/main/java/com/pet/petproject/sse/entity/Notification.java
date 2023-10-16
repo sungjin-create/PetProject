@@ -1,4 +1,4 @@
-package com.pet.petproject.common.sse.entity;
+package com.pet.petproject.sse.entity;
 
 import com.pet.petproject.member.entity.Member;
 import javax.persistence.Column;

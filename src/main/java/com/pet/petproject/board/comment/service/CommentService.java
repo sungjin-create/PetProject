@@ -17,16 +17,16 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class CommentService {
 
-    private final CommentRepository commentRepository;
-    private final MemberRepository memberRepository;
-    private final BoardRepository boardRepository;
+  private final CommentRepository commentRepository;
+  private final MemberRepository memberRepository;
+  private final BoardRepository boardRepository;
 
-    @Transactional
-    public void registerComment(String memberId, CommentRegisterDto parameter) {
-        Member member = memberRepository.findById(memberId).orElseThrow(
-                () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Member"));
-        Board board = boardRepository.findById(parameter.getBoardId())
-                .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
-        commentRepository.save(Comment.of(member, board, parameter.getContents()));
-    }
+  @Transactional
+  public void registerComment(String memberId, CommentRegisterDto parameter) {
+    Member member = memberRepository.findById(memberId).orElseThrow(
+        () -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Member"));
+    Board board = boardRepository.findById(parameter.getBoardId())
+        .orElseThrow(() -> new AppException(HttpStatus.BAD_REQUEST, "Not Found Board"));
+    commentRepository.save(Comment.of(member, board, parameter.getContents()));
+  }
 }

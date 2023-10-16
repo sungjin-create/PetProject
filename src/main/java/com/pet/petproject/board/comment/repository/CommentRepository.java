@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
-    Page<Comment> findByBoard(Board board, Pageable pageable);
+  Page<Comment> findByBoard(Board board, Pageable pageable);
 
 }
